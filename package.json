@@ -1,0 +1,20 @@
+{
+  "name": "weather",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.10.0",
+    "csv": "^0.4.1",
+    "ejs": "^1.0.0",
+    "express": "^4.10.6",
+    "express-ejs-layouts": "^1.1.0",
+    "i18n": "^0.5.0",
+    "multer": "^0.1.6"
+  }
+}
