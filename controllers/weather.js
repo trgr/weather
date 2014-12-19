@@ -7,22 +7,23 @@ var fs = require( 'fs' )
 module.exports = {
 	
 	getWeatherData : function( req , res ){
-		WeatherLog.aggregate( {
-			$group : { _id : {
+		var d = new Date("12-02-2014 00:01")
+		WeatherLog.aggregate( [
+			{ $match : { time : { $gt : d } } } ,
+			{ $sort  : { time: -1 } },
+			{ $group : { _id : {
 				month : { $month : "$time" },
-				/* day: { $dayOfMonth: "$time" } */
-			},
-								 tempInside : { $avg : "$tempInside" } 
-							 }
-								 
-		} , function( err , logdata ){
+				day: { $dayOfMonth: "$time" } },
+									 tempInside : { $avg : "$tempInside" } 
+								 } }
+		], function( err , logdata ){
 			
-			res.send( logdata )
+			res.json( logdata )
 		})
 	},
 
 	index : function( req , res ){
-		
+		res.render( 'index' )
 	},
 
 	upload : function( req , res ) {
