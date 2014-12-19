@@ -4,13 +4,25 @@ var async = require( 'async' )
 var WeatherLog = require( '../schemas/weatherlog' )
 var fs = require( 'fs' )
 
-var csv = require( 'csv' )
 module.exports = {
 	
-	index : function( req , res ){
-		WeatherLog.find({} , function( err , logdata ){
+	getWeatherData : function( req , res ){
+		WeatherLog.aggregate( {
+			$group : { _id : {
+				month : { $month : "$time" },
+				/* day: { $dayOfMonth: "$time" } */
+			},
+								 tempInside : { $avg : "$tempInside" } 
+							 }
+								 
+		} , function( err , logdata ){
+			
 			res.send( logdata )
 		})
+	},
+
+	index : function( req , res ){
+		
 	},
 
 	upload : function( req , res ) {
