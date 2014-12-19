@@ -1,5 +1,5 @@
 var util = require( 'util' )
-
+var mongoose   = require( 'mongoose' )
 var i18n       = require( 'i18n' )
 var express    = require( 'express' )
 var multer     = require( 'multer' )
@@ -10,6 +10,7 @@ var bodyparser = require( 'body-parser' )
 var routes       = require( './config/routes' )
 
 var config   = require( './config/config' )
+mongoose.connect( config.database )
 
 i18n.configure({
     locales:['en'],
