@@ -15,6 +15,7 @@
     "express": "^4.10.6",
     "express-ejs-layouts": "^1.1.0",
     "i18n": "^0.5.0",
+    "iconv": "^2.1.4",
     "multer": "^0.1.6"
   }
 }

@@ -22,28 +22,28 @@ module.exports = {
 					var tmp = data[i].toString("ascii").split("\t")					
 					if( typeof( tmp[1] ) == "undefined" )
 						continue
-					
-					var no = tmp[0]
-					var time = tmp[1].toString("utf8")
-					var interval = tmp[2]
-					var tempInside = tmp[3]
-					var airMoistInside = tmp[4]
-					var tempOutside = tmp[5]
-					var airMoistOutside = tmp[6]
-					var relHPA = tmp[7]
-					var absHPA = tmp[8]
-					var windSpeed = tmp[9]
-					var windBy = tmp[10]
-					var windDir = tmp[11]
-					var dewPoint = tmp[12]
-					var windTemp = tmp[13]
-					var rainprhour = tmp[14]
-					var rainlasttwentyfour = tmp[15]
-					var rainlastweek = tmp[16]
-					var rainlastmonth = tmp[17]
-					var raintotal = tmp[18]
-														
-					console.log( raintotal )
+					var structure = {
+						no : tmp[0].toString("utf8"),
+						time : tmp[1].toString("utf8"),
+						interval : tmp[2].toString("utf8"),
+						tempInside : tmp[3].toString("utf8"),
+						airMoistInside : tmp[4].toString("utf8"),
+						tempOutside : tmp[5].toString("utf8"),
+						airMoistOutside : tmp[6].toString("utf8"),
+						relHPA : tmp[7].toString("utf8"),
+						absHPA : tmp[8].toString("utf8"),
+						windSpeed : tmp[9].toString("utf8"),
+						windBy : tmp[10].toString("utf8"),
+						windDir : tmp[11].toString("utf8"),
+						dewPoint : tmp[12].toString("utf8"),
+						windTemp : tmp[13].toString("utf8"),
+						rainprhour : tmp[14].toString("utf8"),
+						rainlasttwentyfour : tmp[15].toString("utf8"),
+						rainlastweek : tmp[16].toString("utf8"),
+						rainlastmonth : tmp[17].toString("utf8"),
+						raintotal : tmp[18].toString("utf8")
+					}	
+					console.log( structure )
 				}
 			})
 		})
