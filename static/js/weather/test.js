@@ -22,12 +22,9 @@ function getDatasetAndLabels( data ){
 	return { labels : labels, dataset:dataset }
 }
 
-$(document).ready(function(){
-	// Get context with jQuery - using jQuery's .get() method.
-	
-	var ctx = $("#tmpOutside").get(0).getContext("2d");
-
-	$.get( 'ajax/weather?field=tempOutside&day=true&type=min' , function( data ){
+function createChart( field , day , type , element , chartType){
+	$.get( 'ajax/weather?field='+field+'&day='+day+'type='+type, function( data ){
+		var ctx = $(element).get(0).getContext("2d");
 		var dandl = getDatasetAndLabels( data )
 		var data = {
 			labels: dandl.labels,
@@ -45,9 +42,21 @@ $(document).ready(function(){
 			]
 		};
 		
-		
-		var myLineChart = new Chart(ctx).Line(data, { });
-	})
+		if( chartType == "line")
+			var myLineChart = new Chart(ctx).Line(data, { });
 
+		if( chartType == "bar")
+			var myLineChart = new Chart(ctx).Bar(data, { });
+		
+	});	
+}
+
+$(document).ready(function(){
+	
+	createChart( "tempOutside" , true , "avg" , "#tmpOutside" , "line");
+
+	createChart( "airMoistOutside" , true , "avg" , "#airMoistOutside" , "bar" );
+
+	createChart( "dewPoint" , true , "avg" , "#dewPoint" , "line" );
 	
 });
