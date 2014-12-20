@@ -22,10 +22,12 @@ function getDatasetAndLabels( data ){
 	return { labels : labels, dataset:dataset }
 }
 
-function createChart( field , day , type , element , chartType){
+function createChart( field , day , type ,  htmlelement, chartType , title){
 	$.get( 'ajax/weather?field='+field+'&day='+day+'type='+type, function( data ){
-		var ctx = $(element).get(0).getContext("2d");
+
+		
 		var dandl = getDatasetAndLabels( data )
+		
 		var data = {
 			labels: dandl.labels,
 			datasets: [
@@ -41,22 +43,57 @@ function createChart( field , day , type , element , chartType){
 				}
 			]
 		};
+
+		var panel   = document.createElement("div");
+		$(panel).addClass( "panel panel-default");
+		
+		var heading = document.createElement("div");
+		$(heading).addClass("panel-heading");
+		$(heading).html( title);
+
+		var body = document.createElement("div");
+		$(body).addClass( "panel-body" );
+
+		var canvas = document.createElement( "canvas" );
+		$(canvas).attr("width", 400 );
+		$(canvas).attr("height", 400 );
+
+		$(body).append( canvas );
+
+		$(panel).append( heading )
+
+		$(panel).append( body )
+
+		$(htmlelement).append( panel )
+
+
+		// Draw
+		var ctx = $(canvas).get(0).getContext("2d");		
 		
 		if( chartType == "line")
-			var myLineChart = new Chart(ctx).Line(data, { });
+			var myLineChart = new Chart(ctx).Line(data, { animation : false } );
 
 		if( chartType == "bar")
 			var myLineChart = new Chart(ctx).Bar(data, { });
-		
+
+
 	});	
 }
 
 $(document).ready(function(){
 	
-	createChart( "tempOutside" , true , "avg" , "#tmpOutside" , "line");
+	createChart( "tempOutside" , true , "avg"  , "#colTmpOutside", "line" , "Tempratur ute");
 
-	createChart( "airMoistOutside" , true , "avg" , "#airMoistOutside" , "bar" );
+	createChart( "airMoistOutside" , true , "avg" , "#colAirMoistOutside" ,"line" , "Luftfuktighet ute"  );
 
-	createChart( "dewPoint" , true , "avg" , "#dewPoint" , "line" );
+	createChart( "dewPoint" , true , "avg" , "#colDewPoint" ,"line" , "Duggpunkt"  );
+	
+	createChart( "rainprhour" , true , "avg" ,  "#colRainPrHour" ,"line" , "Regn pr time"  );
+
+	createChart( "windSpeed" , true , "avg" ,  "#colWindSpeed" ,"line" , "Vindhastighet"  );
+
+	createChart( "windTemp" , true , "avg" ,  "#colWindTemp" ,"line" , "Vindtemperatur"  );
+
+	//createChart( "dewPoint" , true , "avg" , "#dewPoint" , "line" );
 	
 });
