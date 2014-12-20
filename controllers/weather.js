@@ -1,22 +1,58 @@
+var util = require( 'util' )
 var StringDecoder = require('string_decoder').StringDecoder
 var async = require( 'async' )
 
 var WeatherLog = require( '../schemas/weatherlog' )
 var fs = require( 'fs' )
 
+function buildQuery( field, type , month , day, time ){
+	
+	var d = new Date("12-02-2014 00:01")
+	
+	var group = { }
+	var sort  = { }
+	var datapoint = {}
+
+	group.year = { $year : "$time" }
+	
+	if( month ){
+		group.month = { $month : "$time" }
+		sort['_id.month'] = 1 
+	}
+	
+	if( day ){
+		group.day = { $dayOfMonth : "$time" }
+		sort['_id.day'] = 1
+	}
+
+	var query_type = "$" + type
+	
+	datapoint[query_type] = "$" + field
+	var query = [
+		{ $match : { time : { $gt : d } } } ,
+
+		{ $group : { _id : group,
+								 datapoint : datapoint
+							 } },
+		{ $sort  : sort }
+	]
+	return query
+}
 module.exports = {
 	
-	getWeatherData : function( req , res ){
-		var d = new Date("12-02-2014 00:01")
-		WeatherLog.aggregate( [
-			{ $match : { time : { $gt : d } } } ,
-			{ $sort  : { time: -1 } },
-			{ $group : { _id : {
-				month : { $month : "$time" },
-				day: { $dayOfMonth: "$time" } },
-									 tempInside : { $avg : "$tempInside" } 
-								 } }
-		], function( err , logdata ){
+	getlog : function( req , res ){
+		
+		var field = req.param('field')
+		var type  = req.param( 'type' )|| "avg"
+		var month = req.param('month') || true
+		var day   = req.param('day')   || false
+		var time  = req.param('time')  || false
+		
+		var query = buildQuery( field, type , month , day, time )
+		
+		console.log( util.inspect( query , { depth : null } ) )
+		
+		WeatherLog.aggregate( query ,function( err , logdata ){
 			
 			res.json( logdata )
 		})
