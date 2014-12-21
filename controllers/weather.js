@@ -5,15 +5,15 @@ var async = require( 'async' )
 var WeatherLog = require( '../schemas/weatherlog' )
 var fs = require( 'fs' )
 
-function buildQuery( field, type , month , day, time , startDate , endDate){
+function buildQuery( field, type , month , day, showHours , startDate , endDate){
 
-	var d = new Date("12-02-2014 00:01")
 	
 	var group = { }
 	var sort  = { }
 	var datapoint = {}
 
 	group.year = { $year : "$time" }
+	
 	
 	if( month ){
 		group.month = { $month : "$time" }
@@ -24,8 +24,8 @@ function buildQuery( field, type , month , day, time , startDate , endDate){
 		group.day = { $dayOfMonth : "$time" }
 		sort['_id.day'] = 1
 	}
-
-	if( time ){
+	
+	if( showHours ){
 		group.hour = { $hour : "$time" }
 		sort['_id.hour'] = 1
 	}
@@ -41,6 +41,8 @@ function buildQuery( field, type , month , day, time , startDate , endDate){
 							 } },
 		{ $sort  : sort }
 	]
+	
+	console.log( query )
 	return query
 }
 module.exports = {
@@ -51,14 +53,14 @@ module.exports = {
 		var type  = req.param( 'type' )|| "avg"
 		var month = req.param('month') || true
 		var day   = req.param('day')   || false
-		var time  = req.param('time')  || false
+		var showHours  = req.param('showHours')  || false
 
 		var startDate = req.param( 'startDate' )
 		var endDate   = req.param( 'endDate' )
 		
-		var query = buildQuery( field, type , month , day, time , startDate , endDate )
+		var query = buildQuery( field, type , month , day, showHours , startDate , endDate )
 		
-		console.log( util.inspect( query , { depth : null } ) )
+		//console.log( util.inspect( query , { depth : null } ) )
 		
 		WeatherLog.aggregate( query ,function( err , logdata ){
 			

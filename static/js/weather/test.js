@@ -1,9 +1,13 @@
 function formatDate( date , hastime){
-	var datetring = date.getDate() + "-" + (date.getMonth() +1 ) + "-" + date.getFullYear()
-	return datetring
+
+	var datestring = date.getDate() + "-" + (date.getMonth() +1 ) + "-" + date.getFullYear()
+	if( hastime )
+		datestring +=  " " + date.getHours() + ":" + date.getMinutes();
+	
+	return datestring
 }
 
-function getDatasetAndLabels( data ){
+function getDatasetAndLabels( data , showHours ){
 	var setLength = data.length;
 	var labels    = new Array()
 	var dataset   = new Array()
@@ -14,19 +18,21 @@ function getDatasetAndLabels( data ){
 		tmpDate.setFullYear( data[i]._id.year );
 		tmpDate.setMonth( data[i]._id.month - 1 );
 		tmpDate.setDate( data[i]._id.day );
+		tmpDate.setMinutes( 0 );
+		if( data[i]._id.hour )
+			tmpDate.setHours( data[i]._id.hour );
 		
-		labels.push ( formatDate(tmpDate) );
+		
+		labels.push ( formatDate(tmpDate , showHours ) );
 		dataset.push( data[i].datapoint );
 	}
 
 	return { labels : labels, dataset:dataset }
 }
 
-function createChart( startDate , endDate ,field , day , type ,  htmlelement, chartType , title){
-	$.get( 'ajax/weather?field='+field+'&day='+day+'&type='+type+'&startDate='+startDate+'&endDate='+endDate, function( data ){
-
-		
-		var dandl = getDatasetAndLabels( data )
+function createChart( startDate , endDate , showHours ,field , day , type ,  htmlelement, chartType , title){
+	$.get( 'ajax/weather?field='+field+'&day='+day+'&type='+type+'&startDate='+startDate+'&endDate='+endDate+'&showHours='+showHours , function( data ){
+		var dandl = getDatasetAndLabels( data , showHours );
 		
 		var data = {
 			labels: dandl.labels,
@@ -82,37 +88,36 @@ function createChart( startDate , endDate ,field , day , type ,  htmlelement, ch
 }
 
 
-function drawCharts( startDate , endDate , graphFunction ){
-	createChart( startDate , endDate , "tempOutside" , true , "max"  , "#colTmpOutside", "line" , "Tempratur ute");
+function drawCharts( startDate , endDate , graphFunction , showHours ){
+	createChart( startDate , endDate , showHours ,  "tempOutside" , true , graphFunction  , "#colTmpOutside", "line" , "Tempratur ute");
 
-	createChart( startDate , endDate ,"airMoistOutside" , true , "max" , "#colAirMoistOutside" ,"line" , "Luftfuktighet ute"  );
+	createChart( startDate , endDate , showHours , "airMoistOutside" , true , graphFunction , "#colAirMoistOutside" ,"line" , "Luftfuktighet ute"  );
 
-	createChart( startDate , endDate ,"dewPoint" , true , "max" , "#colDewPoint" ,"line" , "Duggpunkt"  );
+	createChart( startDate , endDate , showHours , "dewPoint" , true , graphFunction , "#colDewPoint" ,"line" , "Duggpunkt"  );
 	
-	createChart( startDate , endDate , "rainprhour" , true , "max" ,  "#colRainPrHour" ,"line" , "Regn pr time"  );
+	createChart( startDate , endDate , showHours , "rainprhour" , true , graphFunction ,  "#colRainPrHour" ,"line" , "Regn pr time"  );
 
-	createChart( startDate , endDate ,"windSpeed" , true , "max" ,  "#colWindSpeed" ,"line" , "Vindhastighet"  );
+	createChart( startDate , endDate , showHours , "windSpeed" , true , graphFunction ,  "#colWindSpeed" ,"line" , "Vindhastighet"  );
 
-	createChart( startDate , endDate , "windTemp" , true , "max" ,  "#colWindTemp" ,"line" , "Vindtemperatur"  );
+	createChart( startDate , endDate , showHours , "windTemp" , true , graphFunction ,  "#colWindTemp" ,"line" , "Vindtemperatur"  );
 }
 
 function draw(){
 	var startDate = new Date( $("#dateFromVal").val() );
 	var endDate   = new Date( $("#dateToVal").val() );
-	console.log( startDate );
-	console.log( endDate );
+
+	var graphFunction = $("#graphFunc").val();
+
+	var showHours = $("#showHours").is(":checked");
 	if( startDate == "Invalid Date" || endDate == "Invalid Date" ){
 		startDate = new Date();
 		endDate   = new Date();
 		startDate.setMonth( startDate.getMonth() - 1 );			
 	}
-	console.log( startDate );
-	console.log( endDate );
-	
-	drawCharts( startDate , endDate , "min" );
+	console.log( showHours );
+	drawCharts( startDate , endDate ,  graphFunction , showHours );
 }
 $(document).ready(function(){
-
 	
 
 	$('#dateFrom').datetimepicker({ pickTime: false});
