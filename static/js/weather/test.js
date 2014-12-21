@@ -82,18 +82,21 @@ function createChart( field , day , type ,  htmlelement, chartType , title){
 
 $(document).ready(function(){
 	
-	createChart( "tempOutside" , true , "avg"  , "#colTmpOutside", "line" , "Tempratur ute");
+	createChart( "tempOutside" , true , "max"  , "#colTmpOutside", "line" , "Tempratur ute");
 
-	createChart( "airMoistOutside" , true , "avg" , "#colAirMoistOutside" ,"line" , "Luftfuktighet ute"  );
+	createChart( "airMoistOutside" , true , "max" , "#colAirMoistOutside" ,"line" , "Luftfuktighet ute"  );
 
-	createChart( "dewPoint" , true , "avg" , "#colDewPoint" ,"line" , "Duggpunkt"  );
+	createChart( "dewPoint" , true , "max" , "#colDewPoint" ,"line" , "Duggpunkt"  );
 	
-	createChart( "rainprhour" , true , "avg" ,  "#colRainPrHour" ,"line" , "Regn pr time"  );
+	createChart( "rainprhour" , true , "max" ,  "#colRainPrHour" ,"line" , "Regn pr time"  );
 
-	createChart( "windSpeed" , true , "avg" ,  "#colWindSpeed" ,"line" , "Vindhastighet"  );
+	createChart( "windSpeed" , true , "max" ,  "#colWindSpeed" ,"line" , "Vindhastighet"  );
 
-	createChart( "windTemp" , true , "avg" ,  "#colWindTemp" ,"line" , "Vindtemperatur"  );
+	createChart( "windTemp" , true , "max" ,  "#colWindTemp" ,"line" , "Vindtemperatur"  );
 
-	//createChart( "dewPoint" , true , "avg" , "#dewPoint" , "line" );
+	//createChart( "dewPoint" , true , "max" , "#dewPoint" , "line" );
 	
+
+	$('#dateFrom').datetimepicker({ pickTime: false});
+	$('#dateTo').datetimepicker({ pickTime: false});
 });

@@ -6,7 +6,7 @@ var WeatherLog = require( '../schemas/weatherlog' )
 var fs = require( 'fs' )
 
 function buildQuery( field, type , month , day, time ){
-	
+
 	var d = new Date("12-02-2014 00:01")
 	
 	var group = { }
@@ -23,6 +23,11 @@ function buildQuery( field, type , month , day, time ){
 	if( day ){
 		group.day = { $dayOfMonth : "$time" }
 		sort['_id.day'] = 1
+	}
+
+	if( time ){
+		group.hour = { $hour : "$time" }
+		sort['_id.hour'] = 1
 	}
 
 	var query_type = "$" + type
