@@ -5,7 +5,7 @@ var async = require( 'async' )
 var WeatherLog = require( '../schemas/weatherlog' )
 var fs = require( 'fs' )
 
-function buildQuery( field, type , month , day, time ){
+function buildQuery( field, type , month , day, time , startDate , endDate){
 
 	var d = new Date("12-02-2014 00:01")
 	
@@ -34,7 +34,7 @@ function buildQuery( field, type , month , day, time ){
 	
 	datapoint[query_type] = "$" + field
 	var query = [
-		{ $match : { time : { $gt : d } } } ,
+		{ $match : { time : { $gt : new Date(startDate) , $lt : new Date( endDate ) } } } ,
 
 		{ $group : { _id : group,
 								 datapoint : datapoint
@@ -52,8 +52,11 @@ module.exports = {
 		var month = req.param('month') || true
 		var day   = req.param('day')   || false
 		var time  = req.param('time')  || false
+
+		var startDate = req.param( 'startDate' )
+		var endDate   = req.param( 'endDate' )
 		
-		var query = buildQuery( field, type , month , day, time )
+		var query = buildQuery( field, type , month , day, time , startDate , endDate )
 		
 		console.log( util.inspect( query , { depth : null } ) )
 		

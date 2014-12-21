@@ -3,23 +3,45 @@
 		<div class='col-sm-3'>
 			<div class="form-group">
 				<div class='input-group date' id='dateFrom'>
-					<input type='text' class="form-control" />
+					<input type='text' class="form-control" id="dateFromVal"/>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+					</span>
+				</div>
+			</div>
+		</div>
+		
+		<div class='col-sm-3'>
+			<div class="form-group">
+				<div class='input-group date' id='dateTo'>
+					<input type='text' class="form-control" id="dateToVal" />
 					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
 					</span>
 				</div>
 			</div>
 		</div>
 
-		
-		<div class='col-sm-3'>
+		<div class='col-sm-2'>
 			<div class="form-group">
-				<div class='input-group date' id='dateTo'>
-					<input type='text' class="form-control" />
-					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-					</span>
-				</div>
+				<select id="graphFunc">
+					<option value="avg" >Gjennomsnitt</option>
+					<option value="min" >Minimum</option>
+					<option value="max" >Maximum</option>					
+				</select>
+			</div>
+		</div>
+
+		<div class='col-sm-2'>
+			<div class="form-group">
+				<input type="checkbox" id="showHours" >Time for time
+			</div>
+		</div>
+		
+		<div class='col-sm-2'>
+			<div class="form-group">
+				<button class="btn btn-primary" id="updatebtn" >Vis</button>
 			</div>
 		</div>			
+		
 	</div>
 </div>
 

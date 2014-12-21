@@ -22,8 +22,8 @@ function getDatasetAndLabels( data ){
 	return { labels : labels, dataset:dataset }
 }
 
-function createChart( field , day , type ,  htmlelement, chartType , title){
-	$.get( 'ajax/weather?field='+field+'&day='+day+'type='+type, function( data ){
+function createChart( startDate , endDate ,field , day , type ,  htmlelement, chartType , title){
+	$.get( 'ajax/weather?field='+field+'&day='+day+'&type='+type+'&startDate='+startDate+'&endDate='+endDate, function( data ){
 
 		
 		var dandl = getDatasetAndLabels( data )
@@ -62,9 +62,10 @@ function createChart( field , day , type ,  htmlelement, chartType , title){
 
 		$(panel).append( heading )
 
-		$(panel).append( body )
+		$(panel).append( body );
 
-		$(htmlelement).append( panel )
+		$(htmlelement).html("" );
+		$(htmlelement).append( panel );
 
 
 		// Draw
@@ -80,23 +81,46 @@ function createChart( field , day , type ,  htmlelement, chartType , title){
 	});	
 }
 
+
+function drawCharts( startDate , endDate , graphFunction ){
+	createChart( startDate , endDate , "tempOutside" , true , "max"  , "#colTmpOutside", "line" , "Tempratur ute");
+
+	createChart( startDate , endDate ,"airMoistOutside" , true , "max" , "#colAirMoistOutside" ,"line" , "Luftfuktighet ute"  );
+
+	createChart( startDate , endDate ,"dewPoint" , true , "max" , "#colDewPoint" ,"line" , "Duggpunkt"  );
+	
+	createChart( startDate , endDate , "rainprhour" , true , "max" ,  "#colRainPrHour" ,"line" , "Regn pr time"  );
+
+	createChart( startDate , endDate ,"windSpeed" , true , "max" ,  "#colWindSpeed" ,"line" , "Vindhastighet"  );
+
+	createChart( startDate , endDate , "windTemp" , true , "max" ,  "#colWindTemp" ,"line" , "Vindtemperatur"  );
+}
+
+function draw(){
+	var startDate = new Date( $("#dateFromVal").val() );
+	var endDate   = new Date( $("#dateToVal").val() );
+	console.log( startDate );
+	console.log( endDate );
+	if( startDate == "Invalid Date" || endDate == "Invalid Date" ){
+		startDate = new Date();
+		endDate   = new Date();
+		startDate.setMonth( startDate.getMonth() - 1 );			
+	}
+	console.log( startDate );
+	console.log( endDate );
+	
+	drawCharts( startDate , endDate , "min" );
+}
 $(document).ready(function(){
-	
-	createChart( "tempOutside" , true , "max"  , "#colTmpOutside", "line" , "Tempratur ute");
 
-	createChart( "airMoistOutside" , true , "max" , "#colAirMoistOutside" ,"line" , "Luftfuktighet ute"  );
-
-	createChart( "dewPoint" , true , "max" , "#colDewPoint" ,"line" , "Duggpunkt"  );
-	
-	createChart( "rainprhour" , true , "max" ,  "#colRainPrHour" ,"line" , "Regn pr time"  );
-
-	createChart( "windSpeed" , true , "max" ,  "#colWindSpeed" ,"line" , "Vindhastighet"  );
-
-	createChart( "windTemp" , true , "max" ,  "#colWindTemp" ,"line" , "Vindtemperatur"  );
-
-	//createChart( "dewPoint" , true , "max" , "#dewPoint" , "line" );
 	
 
 	$('#dateFrom').datetimepicker({ pickTime: false});
 	$('#dateTo').datetimepicker({ pickTime: false});
+
+	draw();
+	
+	$("#updatebtn").click( function(){
+		draw();		
+	})
 });
