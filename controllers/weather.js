@@ -24,8 +24,10 @@ function buildQuery( field, type , month , day, showHours , startDate , endDate)
 		group.day = { $dayOfMonth : "$time" }
 		sort['_id.day'] = 1
 	}
-	
-	if( showHours == true){
+
+	// month, day , showHours , are all strings for some f'ed up reason.
+	// This should be fixed. But for now, f it.
+	if( showHours == "true" ){
 		group.hour = { $hour : "$time" }
 		sort['_id.hour'] = 1
 	}
@@ -42,7 +44,7 @@ function buildQuery( field, type , month , day, showHours , startDate , endDate)
 		{ $sort  : sort }
 	]
 	
-	console.log( query )
+
 	return query
 }
 module.exports = {
@@ -57,10 +59,11 @@ module.exports = {
 
 		var startDate = req.param( 'startDate' )
 		var endDate   = req.param( 'endDate' )
-		
+
+
 		var query = buildQuery( field, type , month , day, showHours , startDate , endDate )
-		
-		//console.log( util.inspect( query , { depth : null } ) )
+		console.log( showHours )
+		console.log( util.inspect( query , { depth : null } ) )
 		
 		WeatherLog.aggregate( query ,function( err , logdata ){
 			
@@ -78,6 +81,11 @@ module.exports = {
 	importfile : function( req , res ){
 		var filename = req.files.thumbnail.name
 		var weatherInstances = new Array()
+		var password = req.body.password
+
+		if( password != "grimnes" )
+			return res.send( "Feil passord" )
+		
 		fs.readFile( './uploads/'+filename , "ucs2" , function( err , data ){
 			var lines = data.split("\r")
 			for( var i = 1; data.length > i; i++){
@@ -118,7 +126,8 @@ module.exports = {
 			async.forEach( weatherInstances, function( w , callback){
 				w.save( callback )
 			}, function( err , done ){
-				res.render( 'upload_done', { line_count : weatherInstances.length } )
+				res.redirect( "/" )
+				//res.render( 'upload_done', { line_count : weatherInstances.length } )
 			})
 		})
 	}
