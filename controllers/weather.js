@@ -25,7 +25,7 @@ function buildQuery( field, type , month , day, showHours , startDate , endDate)
 		sort['_id.day'] = 1
 	}
 	
-	if( showHours ){
+	if( showHours == true){
 		group.hour = { $hour : "$time" }
 		sort['_id.hour'] = 1
 	}
