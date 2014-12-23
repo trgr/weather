@@ -27,11 +27,21 @@
 				
 				<div class='col-sm-3'>
 					<form method="post" enctype="multipart/form-data" action="/upload">
-						<input type="file" name="thumbnail">
-						<input type="password" name="password" placeholder="Passord"/>
-						<input type="submit" value="Last opp">
+						<div class="form-group">
+							<input type="file" name="thumbnail">
+						</div>
+						<div class="form-group">
+							<input type="password" name="password" placeholder="Passord"/>
+						</div>
+						<div class="form-group">
+							<input type="submit" value="Last opp">
+						</div>
 					</form>
 				</div>
+				<div class='col-sm-3'>
+					Opplastet fil vil overskrive eksisterende databaseinnhold.
+				</div>
+				
 			</div>
 		</div>
 	</div>
