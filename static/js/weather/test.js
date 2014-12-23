@@ -89,7 +89,7 @@ function createChart( startDate , endDate , showHours ,field , day , type ,  htm
 
 
 function drawCharts( startDate , endDate , graphFunction , showHours ){
-	createChart( startDate , endDate , showHours ,  "tempOutside" , true , graphFunction  , "#colTmpOutside", "line" , "Tempratur ute");
+	createChart( startDate , endDate , showHours ,  "tempOutside" , true , graphFunction  , "#colTmpOutside", "line" , "Temperatur ute");
 
 	createChart( startDate , endDate , showHours , "airMoistOutside" , true , graphFunction , "#colAirMoistOutside" ,"line" , "Luftfuktighet ute"  );
 
@@ -100,6 +100,10 @@ function drawCharts( startDate , endDate , graphFunction , showHours ){
 	createChart( startDate , endDate , showHours , "windSpeed" , true , graphFunction ,  "#colWindSpeed" ,"line" , "Vindhastighet"  );
 
 	createChart( startDate , endDate , showHours , "windTemp" , true , graphFunction ,  "#colWindTemp" ,"line" , "Vindtemperatur"  );
+
+	createChart( startDate , endDate , showHours , "relHPA" , true , graphFunction ,  "#colRelHPA" ,"line" , "Rel HPA"  );
+
+	createChart( startDate , endDate , showHours , "absHPA" , true , graphFunction ,  "#colAbsHPA" ,"line" , "Abs HPA"  );
 }
 
 function draw(){
